@@ -1,0 +1,42 @@
+                       List of relations
+ Schema |               Name                |   Type   | Owner 
+--------+-----------------------------------+----------+-------
+ public | auth_group                        | table    | vlad
+ public | auth_group_id_seq                 | sequence | vlad
+ public | auth_group_permissions            | table    | vlad
+ public | auth_group_permissions_id_seq     | sequence | vlad
+ public | auth_permission                   | table    | vlad
+ public | auth_permission_id_seq            | sequence | vlad
+ public | auth_user                         | table    | vlad
+ public | auth_user_groups                  | table    | vlad
+ public | auth_user_groups_id_seq           | sequence | vlad
+ public | auth_user_id_seq                  | sequence | vlad
+ public | auth_user_user_permissions        | table    | vlad
+ public | auth_user_user_permissions_id_seq | sequence | vlad
+ public | django_admin_log                  | table    | vlad
+ public | django_admin_log_id_seq           | sequence | vlad
+ public | django_content_type               | table    | vlad
+ public | django_content_type_id_seq        | sequence | vlad
+ public | django_migrations                 | table    | vlad
+ public | django_migrations_id_seq          | sequence | vlad
+ public | django_session                    | table    | vlad
+ public | recipe_favorite                   | table    | vlad
+ public | recipe_favorite_id_seq            | sequence | vlad
+ public | recipe_follow                     | table    | vlad
+ public | recipe_follow_id_seq              | sequence | vlad
+ public | recipe_ingredient                 | table    | vlad
+ public | recipe_ingredient_amount          | table    | vlad
+ public | recipe_ingredient_amount_id_seq   | sequence | vlad
+ public | recipe_ingredient_id_seq          | sequence | vlad
+ public | recipe_recipe                     | table    | vlad
+ public | recipe_recipe_id_seq              | sequence | vlad
+ public | recipe_recipe_ingredient          | table    | vlad
+ public | recipe_recipe_ingredient_id_seq   | sequence | vlad
+ public | recipe_recipe_tag                 | table    | vlad
+ public | recipe_recipe_tag_id_seq          | sequence | vlad
+ public | recipe_shopping                   | table    | vlad
+ public | recipe_shopping_id_seq            | sequence | vlad
+ public | recipe_tag                        | table    | vlad
+ public | recipe_tag_id_seq                 | sequence | vlad
+(37 rows)
+
