@@ -59,7 +59,7 @@ class Ingredient_amount(models.Model):
 
 
 class Recipe(models.Model):
-    title = models.CharField(
+    name = models.CharField(
         max_length=200,
         unique=True,
         help_text='введите название рецепта',
@@ -76,22 +76,23 @@ class Recipe(models.Model):
         upload_to='recipes/',
         blank=True
     )
-    description = models.TextField(
+    text = models.TextField(
         help_text='введите текст описания ',
         verbose_name='текст описания')
-    ingredient = models.ManyToManyField(
+    ingredients = models.ManyToManyField(
         'Ingredient',
         #on_delete=models.CASCADE,
         help_text='введите ингредиент',
         verbose_name='ингредиент',
+        through=Ingredient_amount
     )
-    tag = models.ManyToManyField(
+    tags = models.ManyToManyField(
         'Tag',
         #on_delete=models.SET_NULL,
         help_text='введите тэг',
         verbose_name='тэг',
     )
-    time = models.PositiveIntegerField(
+    cooking_time = models.PositiveIntegerField(
         help_text='введите количество',
         verbose_name='количество')
 
@@ -99,7 +100,7 @@ class Recipe(models.Model):
         ordering = ['-id']
 
     def __str__(self):
-        return self.title
+        return self.name
 
 
 class Follow(models.Model):

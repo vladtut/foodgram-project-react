@@ -28,10 +28,10 @@ class Ingredient_amountAdmin(admin.ModelAdmin):
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'title', 'author', 'image', 'description', 'time')
+    list_display = ('pk', 'name', 'author', 'image', 'text', 'cooking_time')
     #list_editable = ('c',)
-    search_fields = ('title',)
-    list_filter = ('author', 'title', 'tag')
+    search_fields = ('name',)
+    list_filter = ('author', 'name', 'tags')
     empty_value_display = '-пусто-'
 
 

@@ -1,10 +1,9 @@
 from django.shortcuts import render
-from rest_framework import viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from api.serializers import TagSerializer, IngredientSerializer
+from api.serializers import TagSerializer, IngredientSerializer, RecipeSerializer
 from rest_framework import permissions
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from recipe.models import Tag, Ingredient, User
+from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from recipe.models import Tag, Ingredient, User, Recipe
 from api.permissions import IsAdminOrReadOnly
 from djoser.views import UserViewSet
 from api.paginators import LimitPagePagination
@@ -27,3 +26,12 @@ class CustomUserViewSet(UserViewSet):
     #serializer_class = CustomUserSerializer
     #permission_classes = (IsAdminOrReadOnly,)
     pagination_class = LimitPagePagination
+
+class RecipeViewSet(ModelViewSet):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+    permission_classes = (IsAdminOrReadOnly,)
+    pagination_class = LimitPagePagination
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
