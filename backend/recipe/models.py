@@ -40,7 +40,7 @@ class Ingredient_amount(models.Model):
     ingredient = models.ForeignKey(
         'Ingredient',
         on_delete=models.CASCADE,
-        related_name='ingredient_amount',
+        related_name='ingredient_recipe',
         help_text='введите название ингредиента',
         verbose_name='название ингредиента',
     )
@@ -54,8 +54,8 @@ class Ingredient_amount(models.Model):
     quantity = models.PositiveIntegerField(
         help_text='введите количество',
         verbose_name='количество')
-    def __str__(self):
-        return self.ingredient
+    #def __str__(self):
+    #    return self.ingredient
 
 
 class Recipe(models.Model):
@@ -84,7 +84,7 @@ class Recipe(models.Model):
         #on_delete=models.CASCADE,
         help_text='введите ингредиент',
         verbose_name='ингредиент',
-        through=Ingredient_amount
+        through='Ingredient_amount'
     )
     tags = models.ManyToManyField(
         'Tag',

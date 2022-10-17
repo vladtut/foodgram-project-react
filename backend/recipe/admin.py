@@ -2,6 +2,10 @@ from django.contrib import admin
 
 from .models import Tag, Ingredient, Ingredient_amount, Recipe, Follow, Favorite, Shopping
 
+class IngredientRecipeInline(admin.StackedInline):
+    model = Ingredient_amount
+    #fk_name = 'from_person'
+
 
 class TagAdmin(admin.ModelAdmin):
     list_display = ('pk', 'name', 'slug', 'color')
@@ -33,6 +37,7 @@ class RecipeAdmin(admin.ModelAdmin):
     search_fields = ('name',)
     list_filter = ('author', 'name', 'tags')
     empty_value_display = '-пусто-'
+    inlines = [IngredientRecipeInline]
 
 
 class FollowAdmin(admin.ModelAdmin):

@@ -1,3 +1,5 @@
+from imp import source_from_cache
+from importlib.util import source_hash
 from rest_framework import serializers
 from recipe.models import Tag, Ingredient, Ingredient_amount, Recipe, Follow, Favorite, Shopping
 import base64  
@@ -45,16 +47,20 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class Ingredient_amountSerializer(serializers.ModelSerializer):
     # author = SlugRelatedField(slug_field='username', read_only=True)
+    id = serializers.ReadOnlyField(source='ingredient.id')
+    name = serializers.ReadOnlyField(source='ingredient.name')
+    unit = serializers.ReadOnlyField(source='ingredient.unit')
+    quantity = serializers.ReadOnlyField(source='ingredient_amount.quantity')
 
     class Meta:
-        fields = '__all__'
+        fields = ('id','name','unit','quantity')
         model = Ingredient_amount
 
 class RecipeSerializer(serializers.ModelSerializer):
     # author = SlugRelatedField(slug_field='username', read_only=True)
     image = Base64ImageField(required=False, allow_null=True)
     tags = TagSerializer(many=True, read_only=True)
-    ingredients = IngredientSerializer(many=True, read_only=True)
+    ingredients = Ingredient_amountSerializer(many=True, read_only=True)
     author = CustomUserSerializer(many=False, read_only=True) 
     class Meta:
         fields = ['id', 'image', 'name', 'text', 'cooking_time', 'author', 'ingredients', 'tags']
