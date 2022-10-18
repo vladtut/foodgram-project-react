@@ -5,6 +5,7 @@ from recipe.models import Tag, Ingredient, Ingredient_amount, Recipe, Follow, Fa
 import base64  
 from django.core.files.base import ContentFile
 from django.contrib.auth import get_user_model
+from djoser.serializers import UserCreateSerializer, UserSerializer
 
 User = get_user_model()
 
@@ -24,12 +25,29 @@ class Base64ImageField(serializers.ImageField):
 
         return super().to_internal_value(data)
 
-class CustomUserSerializer(serializers.ModelSerializer):
+class CustomUserCreateSerializer(UserCreateSerializer):
+    # author = SlugRelatedField(slug_field='username', read_only=True)
+    username = serializers.CharField()
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'password']
+        
+#        extra_kwargs = {
+#            'username':{'required': True},
+#            'email':{'required': True},
+#            'first_name':{'required': True},
+#            'last_name':{'required': True},
+#            'password':{'required': True},
+#        }
+
+class CustomUserSerializer(UserSerializer):
     # author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
-        fields = ['email', 'id', 'username', 'first_name', 'last_name']
         model = User
+        fields = ['email', 'id', 'username', 'first_name', 'last_name']
+        
 
 class TagSerializer(serializers.ModelSerializer):
     # author = SlugRelatedField(slug_field='username', read_only=True)
@@ -50,21 +68,38 @@ class Ingredient_amountSerializer(serializers.ModelSerializer):
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
     unit = serializers.ReadOnlyField(source='ingredient.unit')
-    quantity = serializers.ReadOnlyField(source='ingredient_amount.quantity')
 
     class Meta:
-        fields = ('id','name','unit','quantity')
+        fields = ('id','name','unit','amount')
         model = Ingredient_amount
+
+class CreateIngredient_amountSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    amount = serializers.IntegerField()
+
+    class Meta:
+        fields = ('id','amount')
+        model = Ingredient_amount        
 
 class RecipeSerializer(serializers.ModelSerializer):
     # author = SlugRelatedField(slug_field='username', read_only=True)
     image = Base64ImageField(required=False, allow_null=True)
     tags = TagSerializer(many=True, read_only=True)
-    ingredients = Ingredient_amountSerializer(many=True, read_only=True)
+    ingredients = Ingredient_amountSerializer(source='recipe_ingredient',many=True, read_only=True)
     author = CustomUserSerializer(many=False, read_only=True) 
     class Meta:
         fields = ['id', 'image', 'name', 'text', 'cooking_time', 'author', 'ingredients', 'tags']
         model = Recipe
+
+class CreateRecipeSerializer(serializers.ModelSerializer):
+    author = CustomUserSerializer(many=False, read_only=True)
+    image = Base64ImageField(required=False, allow_null=True)
+    #tags = TagSerializer(many=True, read_only=True)
+    ingredients = CreateIngredient_amountSerializer(many=True)
+     
+    class Meta:
+        model = Recipe
+        fields = ['image', 'name', 'text', 'cooking_time', 'author', 'ingredients', 'tags']
 
 class FollowSerializer(serializers.ModelSerializer):
     # author = SlugRelatedField(slug_field='username', read_only=True)

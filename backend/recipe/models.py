@@ -40,7 +40,7 @@ class Ingredient_amount(models.Model):
     ingredient = models.ForeignKey(
         'Ingredient',
         on_delete=models.CASCADE,
-        related_name='ingredient_recipe',
+        related_name='recipe_ingredient',
         help_text='введите название ингредиента',
         verbose_name='название ингредиента',
     )
@@ -51,7 +51,7 @@ class Ingredient_amount(models.Model):
         help_text='введите название рецепта',
         verbose_name='название рецепта',
     )
-    quantity = models.PositiveIntegerField(
+    amount = models.PositiveIntegerField(
         help_text='введите количество',
         verbose_name='количество')
     #def __str__(self):
@@ -93,8 +93,8 @@ class Recipe(models.Model):
         verbose_name='тэг',
     )
     cooking_time = models.PositiveIntegerField(
-        help_text='введите количество',
-        verbose_name='количество')
+        help_text='введите время приготовления',
+        verbose_name='время приготовления')
 
     class Meta:
         ordering = ['-id']

@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.pagination import LimitOffsetPagination
-from api.serializers import TagSerializer, IngredientSerializer, RecipeSerializer
+from api.serializers import TagSerializer, IngredientSerializer, RecipeSerializer, CreateRecipeSerializer
 from rest_framework import permissions
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from recipe.models import Tag, Ingredient, User, Recipe
@@ -32,6 +32,11 @@ class RecipeViewSet(ModelViewSet):
     serializer_class = RecipeSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = LimitPagePagination
+
+    def get_serializer_class(self):
+        if (self.action == 'list' or self.action == 'retrieve'):
+            return RecipeSerializer
+        return CreateRecipeSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

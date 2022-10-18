@@ -24,8 +24,8 @@ class IngredientAdmin(admin.ModelAdmin):
 
 
 class Ingredient_amountAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'ingredient', 'recipe', 'quantity')
-    #ist_editable = ('ingredient', 'recipe', 'quantity ',)
+    list_display = ('pk', 'ingredient', 'recipe', 'amount')
+    #ist_editable = ('ingredient', 'recipe',)
     #search_fields = ('recipe')
     list_filter = ('recipe',)
     empty_value_display = '-пусто-'
