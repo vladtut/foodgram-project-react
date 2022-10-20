@@ -8,6 +8,8 @@ router.register('tags', TagViewSet, basename='tags')
 router.register('ingredients', IngredientViewSet, basename='ingredients')
 router.register('users', CustomUserViewSet, basename='users')
 router.register('recipes', RecipeViewSet, basename='recipes')
+#router.register(r'recipes/(?P<recipe_id>\d+)/favorite',
+#                FavoriteViewSet, basename='favorite')
 app_name = 'api'
 urlpatterns = [  
     path('auth/', include('djoser.urls.authtoken')),
