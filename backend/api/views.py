@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.pagination import LimitOffsetPagination
-from api.serializers import TagSerializer, IngredientSerializer, RecipeSerializer, CreateRecipeSerializer, ShortRecipeSerializer, FollowSerializer
+from api.serializers import TagSerializer, IngredientSerializer, RecipeSerializer, CreateRecipeSerializer, ShortRecipeSerializer, FollowSerializer, ShoppingSerializer
 from rest_framework import status, permissions
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from recipe.models import Favorite, Tag, Ingredient, User, Recipe, Shopping, Follow
@@ -33,12 +33,19 @@ class CustomUserViewSet(UserViewSet):
     #permission_classes = (IsAdminOrReadOnly,)
     pagination_class = LimitPagePagination
 
+    @action(detail=False, methods=('get',), permission_classes=(IsAuthenticated,))
+    def subscriptions(self, request):
+        follow = Follow.objects.filter(user=request.user)
+        serializer=FollowSerializer(follow, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
     @action(detail=True, methods=('post','delete'), permission_classes=(IsAuthenticated,))
     def subscribe(self, request, id=None):
         if request.method == 'POST':
             return self.add_obj(request, id)
-        #elif request.method == 'DELETE':
-            #return self.delete_obj(request.user, pk)           
+        elif request.method == 'DELETE':
+            return self.delete_obj(request, id)
+
 
     def add_obj(self, request, id):
         author = get_object_or_404(User, id=id)
@@ -50,7 +57,16 @@ class CustomUserViewSet(UserViewSet):
         follow = Follow.objects.create(user=request.user, author=author)
         serializer=FollowSerializer(follow, context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-   
+
+    def delete_obj(self, request,  id):
+        author = get_object_or_404(User, id=id)
+        obj = Follow.objects.filter(user=request.user, author=author)
+        if obj.exists():
+            obj.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response({'errors': 'ошибка отписки!'},
+                        status=status.HTTP_400_BAD_REQUEST)
+
 
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
@@ -65,6 +81,12 @@ class RecipeViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+    
+    @action(detail=False, methods=('get',), permission_classes=(IsAuthenticated,))
+    def download_shopping_cart(self, request):
+        shopping = Shopping.objects.filter(user=request.user)
+        serializer = ShoppingSerializer(shopping, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=('post','delete'), permission_classes=(IsAuthenticated,))
     def favorite(self, request, pk=None):
