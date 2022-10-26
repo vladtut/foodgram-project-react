@@ -3,6 +3,7 @@ from django.db import models
 
 User = get_user_model()
 
+
 class Tag(models.Model):
     name = models.CharField(
         max_length=200,
@@ -54,7 +55,7 @@ class Ingredient_amount(models.Model):
     amount = models.PositiveIntegerField(
         help_text='введите количество',
         verbose_name='количество')
-    #def __str__(self):
+    # def __str__(self):
     #    return self.ingredient
 
 
@@ -81,14 +82,14 @@ class Recipe(models.Model):
         verbose_name='текст описания')
     ingredients = models.ManyToManyField(
         'Ingredient',
-        #on_delete=models.CASCADE,
+        # on_delete=models.CASCADE,
         help_text='введите ингредиент',
         verbose_name='ингредиент',
         through='Ingredient_amount'
     )
     tags = models.ManyToManyField(
         'Tag',
-        #on_delete=models.SET_NULL,
+        # on_delete=models.SET_NULL,
         help_text='введите тэг',
         verbose_name='тэг',
     )
@@ -120,7 +121,6 @@ class Follow(models.Model):
     )
 
 
-
 class Favorite(models.Model):
     user = models.ForeignKey(
         User,
@@ -136,8 +136,6 @@ class Favorite(models.Model):
         help_text='введите название рецепта',
         verbose_name='название рецепта',
     )
-
-
 
 
 class Shopping(models.Model):

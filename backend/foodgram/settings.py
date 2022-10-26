@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-from datetime import timedelta
+# from datetime import timedelta
 from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -23,7 +23,7 @@ load_dotenv()
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@qnc$ovj3gjz%(ko8bi)ix4)5$phkw%xj_ou9o*bate-=fgc_j'
+SECRET_KEY = 'django-insecure-@qnc$ovj3gjz%(''ko8bi)ix4)5$phkw%xj_ou9o*bate-=fgc_j'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -145,7 +145,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TEMPLATE_DIRS = [
     os.path.join(BASE_DIR, 'static/'),
 ]
-#STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
+# STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly',
@@ -170,8 +170,8 @@ DJOSER = {
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
 ]
-CORS_URLS_REGEX = r'^/api/.*$' 
-#SIMPLE_JWT = {
+CORS_URLS_REGEX = r'^/api/.*$'
+# SIMPLE_JWT = {
 #    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
 #    'AUTH_HEADER_TYPES': ('Bearer',),
-#}
+# }
