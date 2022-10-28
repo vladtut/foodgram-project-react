@@ -3,12 +3,11 @@ from rest_framework.response import Response
 # from rest_framework.pagination import LimitOffsetPagination
 from api.serializers import (TagSerializer, IngredientSerializer,
                              RecipeSerializer, CreateRecipeSerializer,
-                             ShortRecipeSerializer, FollowSerializer,
-                             ShoppingSerializer)
+                             ShortRecipeSerializer, FollowSerializer,)
 from rest_framework import status
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from recipe.models import (Favorite, Tag, Ingredient,
-                           User, Recipe, Shopping, Follow,
+                           Recipe, Shopping, Follow,
                            Ingredient_amount)
 from api.permissions import IsAdminOrReadOnly
 from djoser.views import UserViewSet
@@ -95,13 +94,6 @@ class RecipeViewSet(ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-
-    @action(detail=False, methods=('get',),
-            permission_classes=(IsAuthenticated,))
-    def download_shopping_cart(self, request):
-        shopping = Shopping.objects.filter(user=request.user)
-        serializer = ShoppingSerializer(shopping, context={'request': request})
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=('post', 'delete'),
             permission_classes=(IsAuthenticated,))
