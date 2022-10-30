@@ -8,7 +8,7 @@ from django.core.files.base import ContentFile
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from django.shortcuts import get_object_or_404
-from rest_framework.validators import UniqueTogetherValidator
+from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
 
 User = get_user_model()
 
@@ -31,20 +31,22 @@ class Base64ImageField(serializers.ImageField):
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
-    # author = SlugRelatedField(slug_field='username', read_only=True)
-    username = serializers.CharField()
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())])
+    username = serializers.CharField(
+        validators=[UniqueValidator(queryset=User.objects.all())])
 
     class Meta:
         model = User
         fields = ['username', 'email', 'first_name', 'last_name', 'password']
 
-#        extra_kwargs = {
-#            'username':{'required': True},
-#            'email':{'required': True},
-#            'first_name':{'required': True},
-#            'last_name':{'required': True},
-#            'password':{'required': True},
-#        }
+        extra_kwargs = {
+            'username': {'required': True},
+            'email': {'required': True},
+            'first_name': {'required': True},
+            'last_name': {'required': True},
+            'password': {'required': True},
+        }
 
 
 class CustomUserSerializer(UserSerializer):
@@ -58,6 +60,8 @@ class CustomUserSerializer(UserSerializer):
 
     def get_is_subscribed(self, obj):
         request = self.context.get('request')
+        if request.user.is_anonymous:
+            return False
         subscribed = Follow.objects.filter(user=request.user, author=obj.id)
         return subscribed.exists()
 
@@ -117,6 +121,8 @@ class RecipeSerializer(serializers.ModelSerializer):
 
     def get_is_favorited(self, obj):
         request = self.context.get('request')
+        if request.user.is_anonymous:
+            return False
         favorite = Favorite.objects.filter(user=request.user, recipe=obj.id)
         return favorite.exists()
 

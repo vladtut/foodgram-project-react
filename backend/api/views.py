@@ -18,6 +18,8 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth import get_user_model
 from django.db.models import Sum
 from django.http import HttpResponse
+from api.filters import IngredientSearchFilter, RecipeFilter
+from django_filters.rest_framework import DjangoFilterBackend
 
 User = get_user_model()
 
@@ -33,7 +35,8 @@ class IngredientViewSet(ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    # pagination_class = LimitOffsetPagination
+    filter_backends = (IngredientSearchFilter,)
+    search_fields = ('^name',)
 
 
 class CustomUserViewSet(UserViewSet):
@@ -86,6 +89,8 @@ class RecipeViewSet(ModelViewSet):
     serializer_class = RecipeSerializer
     permission_classes = (IsAdminOrReadOnly,)
     pagination_class = LimitPagePagination
+    filter_backends = (DjangoFilterBackend,)
+    filter_class = RecipeFilter
 
     def get_serializer_class(self):
         if (self.action == 'list' or self.action == 'retrieve'):
