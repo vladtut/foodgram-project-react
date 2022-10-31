@@ -72,7 +72,6 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
           # Выполняет pull образа с DockerHub
-          cd infra
           sudo docker pull vladtut/foodgram-frontend
           sudo docker pull vladtut/foodgram-backend
           #остановка всех контейнеров
