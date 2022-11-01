@@ -9,7 +9,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
 from recipe.models import (Favorite, Tag, Ingredient,
                            Recipe, Shopping, Follow,
                            Ingredient_amount)
-from api.permissions import IsAdminOrReadOnly
+from api.permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
 from djoser.views import UserViewSet
 from api.paginators import LimitPagePagination
 from rest_framework.decorators import action
@@ -87,7 +87,7 @@ class CustomUserViewSet(UserViewSet):
 class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    permission_classes = (IsAdminOrReadOnly,)
+    permission_classes = (IsAuthorOrReadOnly,)
     pagination_class = LimitPagePagination
     filter_backends = (DjangoFilterBackend,)
     filter_class = RecipeFilter
