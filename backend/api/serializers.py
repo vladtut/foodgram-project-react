@@ -1,30 +1,21 @@
-# from imp import source_from_cache
-# from importlib.util import source_hash
-from rest_framework import serializers
-from recipe.models import (Tag, Ingredient, Ingredient_amount,
-                           Recipe, Follow, Favorite, Shopping)
 import base64
 from django.core.files.base import ContentFile
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
+from rest_framework import serializers
+from recipe.models import (Tag, Ingredient, Ingredient_amount,
+                           Recipe, Follow, Favorite, Shopping)
 
 User = get_user_model()
 
 
 class Base64ImageField(serializers.ImageField):
     def to_internal_value(self, data):
-        # Если полученный объект строка, и эта строка
-        # начинается с 'data:image'...
         if isinstance(data, str) and data.startswith('data:image'):
-            # ...начинаем декодировать изображение из base64.
-            # Сначала нужно разделить строку на части.
             format, imgstr = data.split(';base64,')
-            # И извлечь расширение файла.
             ext = format.split('/')[-1]
-            # Затем декодировать сами данные и поместить результат в файл,
-            # которому дать название по шаблону.
             data = ContentFile(base64.b64decode(imgstr), name='temp.' + ext)
 
         return super().to_internal_value(data)
@@ -50,7 +41,6 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
 
 class CustomUserSerializer(UserSerializer):
-    # author = SlugRelatedField(slug_field='username', read_only=True)
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
@@ -67,7 +57,6 @@ class CustomUserSerializer(UserSerializer):
 
 
 class TagSerializer(serializers.ModelSerializer):
-    # author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
         fields = '__all__'
@@ -75,7 +64,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    # author = SlugRelatedField(slug_field='username', read_only=True)
 
     class Meta:
         fields = '__all__'
@@ -83,7 +71,6 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class Ingredient_amountSerializer(serializers.ModelSerializer):
-    # author = SlugRelatedField(slug_field='username', read_only=True)
     id = serializers.ReadOnlyField(source='ingredient.id')
     name = serializers.ReadOnlyField(source='ingredient.name')
     measurement_unit = serializers.ReadOnlyField(
@@ -104,7 +91,6 @@ class CreateIngredient_amountSerializer(serializers.ModelSerializer):
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    # author = SlugRelatedField(slug_field='username', read_only=True)
     image = Base64ImageField(required=False, allow_null=True)
     tags = TagSerializer(many=True, read_only=True)
     ingredients = Ingredient_amountSerializer(
@@ -212,7 +198,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    # author = SlugRelatedField(slug_field='username', read_only=True)
     email = serializers.ReadOnlyField(source='author.email')
     id = serializers.ReadOnlyField(source='author.id')
     username = serializers.ReadOnlyField(source='author.username')

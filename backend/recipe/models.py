@@ -55,8 +55,6 @@ class Ingredient_amount(models.Model):
     amount = models.PositiveIntegerField(
         help_text='введите количество',
         verbose_name='количество')
-    # def __str__(self):
-    #    return self.ingredient
 
 
 class Recipe(models.Model):
@@ -82,14 +80,12 @@ class Recipe(models.Model):
         verbose_name='текст описания')
     ingredients = models.ManyToManyField(
         'Ingredient',
-        # on_delete=models.CASCADE,
         help_text='введите ингредиент',
         verbose_name='ингредиент',
         through='Ingredient_amount'
     )
     tags = models.ManyToManyField(
         'Tag',
-        # on_delete=models.SET_NULL,
         help_text='введите тэг',
         verbose_name='тэг',
     )
@@ -153,6 +149,3 @@ class Shopping(models.Model):
         help_text='введите название рецепта',
         verbose_name='название рецепта',
     )
-
-
-# Create your models here.

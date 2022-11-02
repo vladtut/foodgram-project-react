@@ -1,6 +1,4 @@
-# from django.shortcuts import render
 from rest_framework.response import Response
-# from rest_framework.pagination import LimitOffsetPagination
 from api.serializers import (TagSerializer, IngredientSerializer,
                              RecipeSerializer, CreateRecipeSerializer,
                              ShortRecipeSerializer, FollowSerializer,)
@@ -28,7 +26,6 @@ class TagViewSet(ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAdminOrReadOnly,)
-    # pagination_class = LimitOffsetPagination
 
 
 class IngredientViewSet(ReadOnlyModelViewSet):
